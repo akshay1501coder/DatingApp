@@ -8,6 +8,7 @@ namespace API.Extensions
 {
     public static class IdentityServiceExtions
     {
+        //Service to give JWT token
         public static IServiceCollection AddIdentityServices(this IServiceCollection services,
          IConfiguration config)
         {
