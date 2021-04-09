@@ -23,5 +23,4 @@ export class MemberDetailComponent implements OnInit {
       this.member = memberdata
     })
   }
-
 }

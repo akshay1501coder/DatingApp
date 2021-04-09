@@ -65,5 +65,13 @@ namespace API.Data
             .SingleOrDefaultAsync();
             //_mapper.ConfigurationProvider : this configuration is picked from AutoMapperProfiles.cs
         }
+
+        public async Task<MemberDto> GetMemberByIdAsync(int id)
+        {
+            return await _context.Users
+            .Where(m=>m.Id==id)
+            .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync();
+        }
     }
 }
