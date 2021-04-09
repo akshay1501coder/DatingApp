@@ -1,0 +1,7 @@
+<ng-container *ngIf="member.photos">
+    <carousel>
+        <slide *ngFor="let photo of member.photos">
+            <img src="{{photo.url}}" alt="{{photo.url}}" style="display: block; width: 100%;">
+        </slide>        
+    </carousel>
+</ng-container>

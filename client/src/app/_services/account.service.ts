@@ -19,8 +19,7 @@ export class AccountService {
     return this.http.post(this.baseUrl + "account/login", model).pipe(
       map((user: User) => {
         if (user) {
-          localStorage.setItem('user', JSON.stringify(user));
-          this.currentUserSource.next(user);//adding data to observable using next
+          this.setCurrentUser(user);          
         }
       })
     )
@@ -30,8 +29,7 @@ export class AccountService {
     return this.http.post(this.baseUrl + "account/register", model).pipe(
       map((user: User) => {
         if (user) {
-          localStorage.setItem('user', JSON.stringify(user));
-          this.currentUserSource.next(user);
+          this.setCurrentUser(user);
         }
         return user;// if we dont write this and try to read the response,
         //then it will be "undefined" as even though we are returning from outside
@@ -42,6 +40,7 @@ export class AccountService {
   }
 
   setCurrentUser(user: User) {
+    localStorage.setItem('user',JSON.stringify(user));
     this.currentUserSource.next(user);
   }
 

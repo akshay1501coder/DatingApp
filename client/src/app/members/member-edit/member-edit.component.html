@@ -31,7 +31,8 @@
                 </div>
             </div>
             <div class="card-footer">
-                <button type="submit" [disabled]="!editForm.dirty" form="editForm" class="btn btn-success btn-block">Save Changes</button>
+                <button type="submit" [disabled]="!editForm.dirty" form="editForm"
+                    class="btn btn-success btn-block">Save Changes</button>
             </div>
         </div>
     </div>
@@ -58,7 +59,7 @@
                 </form>
             </tab>
             <tab heading="Photos">
-                <h4>Edit Pics here</h4>
+                <app-photo-editor [member]="member"></app-photo-editor>
             </tab>
         </tabset>
     </div>

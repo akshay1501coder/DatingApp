@@ -7,6 +7,7 @@ using System.Text;
 using API.DTOs;
 using Microsoft.EntityFrameworkCore;
 using API.Interfaces;
+using System.Linq;
 
 namespace API.Controllers
 {
@@ -14,7 +15,7 @@ namespace API.Controllers
     {
         private readonly DataContext _dbContext;
         private readonly ITokenService _tokenService;
-        public AccountController(DataContext dbContext,ITokenService tokenService)
+        public AccountController(DataContext dbContext, ITokenService tokenService)
         {
             _dbContext = dbContext;
             _tokenService = tokenService;
@@ -51,6 +52,7 @@ namespace API.Controllers
         public async Task<ActionResult<UserDto>> Login(LoginDto logindto)
         {
             var user = await _dbContext.Users
+              .Include(p => p.Photos)
               .SingleOrDefaultAsync(m => m.UserName == logindto.UserName.ToLower());
 
             if (user == null)
@@ -68,11 +70,12 @@ namespace API.Controllers
                 {
                     return Unauthorized("Invalid Password");
                 }
-            }            
+            }
             return new UserDto
             {
                 Username = user.UserName,
-                Token = _tokenService.CreateToken(user)
+                Token = _tokenService.CreateToken(user),
+                PhotoUrl = user.Photos.FirstOrDefault(m => m.IsMain)?.Url
             };
         }
 

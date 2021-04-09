@@ -45,4 +45,14 @@ export class MemberService {
       })
     )
   }
+
+  setMainPhoto(photoId: number) {
+    //since its a put request we have to pass something in body so we are passing {}
+    return this.http.put(this.baseUrl + 'users/set-main-photo/' + photoId, {});
+  }
+
+  deletePhoto(photoId: number) {
+    return this.http.delete(this.baseUrl + 'users/delete-photo/' + photoId);
+  }
+
 }
