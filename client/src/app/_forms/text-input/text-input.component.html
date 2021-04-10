@@ -1,0 +1,21 @@
+<div class="form-group">
+    <input
+        [class.is-invalid]="ngControl.touched && ngControl.invalid"
+        type={{type}} 
+        [class.is-valid]="!ngControl.errors"
+        class="form-control" placeholder={{label}}
+        [formControl]="ngControl.control">
+
+        <div *ngIf="ngControl.control.errors?.required" class="invalid-feedback">
+            Please enter {{label}}</div>
+
+        <div *ngIf="ngControl.control.errors?.minlength" class="invalid-feedback">
+            {{label}} must be atleast {{ngControl.control.errors.minlength['requiredLength']}} </div>
+
+        <div *ngIf="ngControl.control.errors?.maxlength" class="invalid-feedback">
+            {{label}} must be atmax {{ngControl.control.errors.maxlength['requiredLength']}} </div>
+
+        <div *ngIf="ngControl.control.errors?.isMatch" class="invalid-feedback">
+            password donot match</div>   
+        
+</div>

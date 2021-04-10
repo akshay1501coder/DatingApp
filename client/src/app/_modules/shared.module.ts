@@ -5,6 +5,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { FileUploadModule } from 'ng2-file-upload'
 import { CarouselModule } from 'ngx-bootstrap/carousel';
+import {BsDatepickerModule} from 'ngx-bootstrap/datepicker';
 
 @NgModule({
   declarations: [],
@@ -17,14 +18,16 @@ import { CarouselModule } from 'ngx-bootstrap/carousel';
     }),
     TabsModule.forRoot(),
     FileUploadModule,
-    CarouselModule.forRoot()
+    CarouselModule.forRoot(),
+    BsDatepickerModule.forRoot()
   ],
   exports: [
     BsDropdownModule,
     ToastrModule,
     TabsModule,
     FileUploadModule,
-    CarouselModule
+    CarouselModule,
+    BsDatepickerModule
   ]
 })
 export class SharedModule { }
