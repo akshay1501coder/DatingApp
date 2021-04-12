@@ -53,7 +53,7 @@ namespace API.Data
         }
 
         //IEnumerable earlier
-        public async Task<PagedList<MemberDto>> GetMembersAsync(PagerParams pagerParams)
+        public async Task<PagedList<MemberDto>> GetMembersAsync(UserParams userParams)
         {
             // return await _context.Users
             // .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
@@ -62,16 +62,16 @@ namespace API.Data
             //Below line is Queryable, i.e.. its just a query unless we prove tolist or other
             var query = _context.Users.AsQueryable();
 
-            var minDob = DateTime.Today.AddYears(-pagerParams.MaxAge - 1);
-            var maxDob = DateTime.Today.AddYears(-pagerParams.MinAge);
+            var minDob = DateTime.Today.AddYears(-userParams.MaxAge - 1);
+            var maxDob = DateTime.Today.AddYears(-userParams.MinAge);
 
             query = query
-                .Where(m => (m.UserName != pagerParams.CurrentUserName)
-                && (m.Gender == pagerParams.Gender));
+                .Where(m => (m.UserName != userParams.CurrentUserName)
+                && (m.Gender == userParams.Gender));
 
             query = query.Where(m => m.DateOfBirth >= minDob && m.DateOfBirth <= maxDob);
             
-            query = pagerParams.OrderBy switch
+            query = userParams.OrderBy switch
             {
                 "created" => query.OrderByDescending(m=>m.Created),
                 _ => query.OrderByDescending(m=>m.LastActive)
@@ -86,7 +86,7 @@ namespace API.Data
 
             return await PagedList<MemberDto>.CreateAsync
             (query.ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
-            , pagerParams.pageNumber, pagerParams.pageSize);
+            , userParams.pageNumber, userParams.pageSize);
         }
 
         public async Task<MemberDto> GetMemberAsync(string username)

@@ -31,17 +31,17 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers([FromQuery] PagerParams pagerParams)
+        public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers([FromQuery] UserParams userParams)
         {
             var user = await _userRepository.GetUserByUsernameAsync(User.GetUserName());
-            pagerParams.CurrentUserName = user.UserName;
+            userParams.CurrentUserName = user.UserName;
 
-            if (string.IsNullOrEmpty(pagerParams.Gender))
+            if (string.IsNullOrEmpty(userParams.Gender))
             {
-                pagerParams.Gender = user.Gender == "male" ? "female" : "male";
+                userParams.Gender = user.Gender == "male" ? "female" : "male";
             }
 
-            var users = await _userRepository.GetMembersAsync(pagerParams);
+            var users = await _userRepository.GetMembersAsync(userParams);
 
             //Custome Extention method for HttpResponse
             Response.AddPaginationHeader(users.CurrentPage, users.PageSize
