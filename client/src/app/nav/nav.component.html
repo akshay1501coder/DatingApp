@@ -12,7 +12,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" routerLink="messages" routerLinkActive="active">Messages</a>
-                </li>               
+                </li>
             </ng-container>
             <li class="nav-item">
                 <a class="nav-link" routerLink="testerror" routerLinkActive="active">Test Errors</a>
@@ -20,8 +20,8 @@
         </ul>
 
         <div class="dropdown" *ngIf="(accountService.currentUser$ | async) as user" dropdown>
-            <img src="{{user.photoUrl || './assets/user.png'}}" alt="{{user.username}}">
-            <a class="dropdown-toggle text-light ml-2" dropdownToggle>Welcome {{user.userName | uppercase}}</a>
+            <img src="{{user.photoUrl || './assets/user.png'}}" alt="{{user.knownAs}}">
+            <a class="dropdown-toggle text-light ml-2" dropdownToggle>Welcome {{user.knownAs | uppercase}}</a>
             <div class="dropdown-menu mt-3" *dropdownMenu>
                 <a routerLink="/member/edit" class="dropdown-item">Edit Profile</a>
                 <div class="dropdown-divider"></div>
