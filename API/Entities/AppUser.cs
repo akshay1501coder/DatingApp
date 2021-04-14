@@ -25,10 +25,8 @@ namespace API.Entities
         public ICollection<UserLike> LikedByUser { get; set; }
         public ICollection<UserLike> LikedUsers { get; set; }
 
-        // public int GetAge()
-        // {
-        //     return DateOfBirth.CalculateAge();
-        // }
+        public ICollection<Message> MessagesSent { get; set; }
+        public ICollection<Message> MessagesReceived { get; set; }
 
     }
 }
