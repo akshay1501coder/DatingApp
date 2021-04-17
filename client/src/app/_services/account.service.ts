@@ -4,6 +4,7 @@ import { ReplaySubject } from 'rxjs';
 import { map } from 'rxjs/operators'
 import { environment } from 'src/environments/environment';
 import { User } from '../_models/user';
+import { PresenceHubService } from './presence-hub.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,13 +14,14 @@ export class AccountService {
   private currentUserSource = new ReplaySubject<User>(1);//creating observable
   currentUser$ = this.currentUserSource.asObservable();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private presenceHubService: PresenceHubService) { }
 
   login(model: any) {
     return this.http.post(this.baseUrl + "account/login", model).pipe(
       map((user: User) => {
         if (user) {
           this.setCurrentUser(user);
+          this.presenceHubService.createHubConnection(user);
         }
       })
     )
@@ -30,6 +32,7 @@ export class AccountService {
       map((user: User) => {
         if (user) {
           this.setCurrentUser(user);
+          this.presenceHubService.createHubConnection(user);
         }
         return user;// if we dont write this and try to read the response,
         //then it will be "undefined" as even though we are returning from outside
@@ -40,7 +43,7 @@ export class AccountService {
   }
 
   setCurrentUser(user: User) {
-    if (user) {
+    if (user) {      
       user.roles = [];
       const roles = this.getDecodedToken(user.token).role;
       Array.isArray(roles) ? user.roles = roles : user.roles.push(roles);
@@ -52,6 +55,7 @@ export class AccountService {
   logout() {
     localStorage.removeItem('user');
     this.currentUserSource.next(null);// removing data from observable
+    this.presenceHubService.stopHubConnection();
   }
 
   getDecodedToken(token: string) {

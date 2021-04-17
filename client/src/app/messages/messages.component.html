@@ -31,14 +31,14 @@
             <td>
                 <div *ngIf="container==='Outbox'">
                     <img
-                    [src]="sanitizer.bypassSecurityTrustUrl(message.recipientPhotoUrl) || './assets/user.png'"
+                    [src]="message.recipientPhotoUrl!==null?sanitizer.bypassSecurityTrustUrl(message.recipientPhotoUrl) : './assets/user.png'"
                     class="img-circle rounded-circle mr-2"
                     alt=" {{message.recipientUsername}} ">
                     <strong> {{message.recipientUsername | titlecase}} </strong>
                 </div>
                 <div *ngIf="container !=='Outbox'">
                     <img class="img-circle rounded-circle mr-2"
-                        [src]=" sanitizer.bypassSecurityTrustUrl(message.senderPhotoUrl) || './assets/user.png'"
+                        [src]="message.senderPhotoUrl!==null?sanitizer.bypassSecurityTrustUrl(message.senderPhotoUrl) : './assets/user.png'"
                         alt=" {{message.senderUsername}} ">
                     <strong> {{message.senderUsername | titlecase}} </strong>
                 </div>

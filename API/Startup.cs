@@ -1,25 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using API.Data;
-using API.Interfaces;
-using API.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using API.Extensions;
 using API.Middleware;
+using API.SignalR;
 
 namespace API
 {
@@ -41,7 +28,8 @@ namespace API
             services.AddApplicationServices(_config);
             services.AddControllers();
             services.AddCors();            
-            services.AddIdentityServices(_config);            
+            services.AddIdentityServices(_config);
+            services.AddSignalR();         
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,7 +47,10 @@ namespace API
 
             app.UseRouting();
 
-            app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
+            app.UseCors(x => x.AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials() //for signalR
+                .WithOrigins("https://localhost:4200"));
 
             app.UseAuthentication();
 
@@ -68,6 +59,9 @@ namespace API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                //telling routing or endpoint about the Signal-R hub
+                endpoints.MapHub<PresenceHub>("hubs/presence");//path to access this hub
+                endpoints.MapHub<MessageHub>("hubs/message");//path to access this hub
             });
         }
     }
