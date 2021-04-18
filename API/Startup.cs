@@ -27,9 +27,9 @@ namespace API
             });
             services.AddApplicationServices(_config);
             services.AddControllers();
-            services.AddCors();            
+            services.AddCors();
             services.AddIdentityServices(_config);
-            services.AddSignalR();         
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,8 +53,15 @@ namespace API
                 .WithOrigins("https://localhost:4200"));
 
             app.UseAuthentication();
-
             app.UseAuthorization();
+
+            /*
+                after we publis API we need to tell it to use static files and our angular
+                app is just a javascript static files and UseDefaultFiles() by default
+                search for index.html as default file which is there in our angular app
+            */
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
 
             app.UseEndpoints(endpoints =>
             {
@@ -62,6 +69,7 @@ namespace API
                 //telling routing or endpoint about the Signal-R hub
                 endpoints.MapHub<PresenceHub>("hubs/presence");//path to access this hub
                 endpoints.MapHub<MessageHub>("hubs/message");//path to access this hub
+                endpoints.MapFallbackToController("Index", "Fallback");
             });
         }
     }
