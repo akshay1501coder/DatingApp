@@ -42,11 +42,6 @@ namespace API.Data
             (m => m.UserName == username);
         }
 
-        public async Task<bool> SaveAllAsync()
-        {
-            return await _context.SaveChangesAsync() > 0;
-        }
-
         public void UpdateProfile(AppUser user)
         {
             _context.Entry(user).State = EntityState.Modified;
@@ -70,13 +65,13 @@ namespace API.Data
                 && (m.Gender == userParams.Gender));
 
             query = query.Where(m => m.DateOfBirth >= minDob && m.DateOfBirth <= maxDob);
-            
+
             query = userParams.OrderBy switch
             {
-                "created" => query.OrderByDescending(m=>m.Created),
-                _ => query.OrderByDescending(m=>m.LastActive)
+                "created" => query.OrderByDescending(m => m.Created),
+                _ => query.OrderByDescending(m => m.LastActive)
             };
-            
+
             // query = query.ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
             // .AsNoTracking();
 
@@ -104,6 +99,13 @@ namespace API.Data
             .Where(m => m.Id == id)
             .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
+        }
+
+        public async Task<string> GetUserGender(string username)
+        {
+            return await _context.Users
+                .Where(u => u.UserName == username)
+                .Select(u => u.Gender).FirstOrDefaultAsync();
         }
     }
 }
